@@ -9,10 +9,7 @@ How to Generate the Book
 1. Make sure you're connected to the Internet. The ebook will be generated using
 the latest content on the website.
 2. Download [KindleGen][2] and make sure the executable is on PATH.
-3. Run:
-
-   `$ make`
-
+3. Run: `$ make`
 4. Load build/learn-you-some-erlang.mobi on your Kindle device or test it with
 the [Kindle Previewer tool][2].
 

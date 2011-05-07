@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<package xmlns="http://www.idpf.org/2007/opf" version="2.0">
+  <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf">
+    <dc:title><?php echo escape($title); ?></dc:title>
+    <dc:language><?php echo escape($language); ?></dc:language>
+    <dc:creator><?php echo escape($author); ?></dc:creator>
+    <meta name="cover" content="cover"/>
+  </metadata>
+
+  <manifest>
+<?php foreach ($items as $item) { ?>
+    <item id="<?php echo escape($item->id); ?>"
+          media-type="<?php echo escape($item->mediaType); ?>"
+          href="<?php echo escape($item->href); ?>"/>
+<?php } ?>
+
+    <item id="ncx-toc" media-type="application/x-dtbncx+xml" href="toc.ncx"/>
+    <item id="cover" media-type="image/png" href="images/cover.jpg"/>
+  </manifest>
+
+  <spine toc="ncx-toc">
+<?php foreach ($items as $item) { ?>
+    <itemref idref="<?php echo escape($item->id); ?>"/>
+<?php } ?>
+  </spine>
+
+  <guide>
+    <reference type="toc" title="Table of Contents" href="pages/toc.html"></reference>
+    <reference type="text" title="Introduction" href="pages/introduction.html"></reference>
+  </guide>
+</package>

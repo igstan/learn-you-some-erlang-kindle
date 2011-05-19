@@ -1,6 +1,6 @@
 <?php
 
-require_once dirname(__FILE__) . '/config.php';
+require_once __DIR__ . '/config.php';
 
 
 function filter($a, $fn) {
@@ -155,7 +155,7 @@ function changeLayout($pageHtml) {
     $original->loadHTML($pageHtml);
     $content = $original->getElementById('content');
 
-    $modified->loadHTML(renderTemplate(dirname(__FILE__) . '/templates/page-layout.html', array(
+    $modified->loadHTML(renderTemplate(__DIR__ . '/templates/page-layout.html', array(
         'title' => EBOOK_TITLE,
     )));
 
@@ -282,7 +282,7 @@ function buildTocNcx($pages) {
         }),
     );
 
-    $ncx = renderTemplate(dirname(__FILE__) . '/templates/toc.ncx', $data);
+    $ncx = renderTemplate(__DIR__ . '/templates/toc.ncx', $data);
     file_put_contents(BUILD_DIR . '/toc.ncx', $ncx);
     return $ncx;
 }
@@ -303,17 +303,17 @@ function buildOpf($pages) {
         }),
     );
 
-    $opf = renderTemplate(dirname(__FILE__) . '/templates/book.opf', $data);
+    $opf = renderTemplate(__DIR__ . '/templates/book.opf', $data);
     file_put_contents(BUILD_DIR . '/book.opf', $opf);
     return $opf;
 }
 
 function copyStaticFiles() {
-    copy(dirname(__FILE__) . '/css/main.css', BUILD_DIR . '/css/main.css');
-    copy(dirname(__FILE__) . '/images/cover.jpg', BUILD_DIR . '/images/cover.jpg');
-    copy(dirname(__FILE__) . '/images/cc.png', BUILD_DIR . '/images/cc.png');
-    copy(dirname(__FILE__) . '/templates/preamble.html', BUILD_DIR . '/pages/preamble.html');
-    copy(dirname(__FILE__) . '/templates/license.html', BUILD_DIR . '/pages/license.html');
+    copy(__DIR__ . '/css/main.css', BUILD_DIR . '/css/main.css');
+    copy(__DIR__ . '/images/cover.jpg', BUILD_DIR . '/images/cover.jpg');
+    copy(__DIR__ . '/images/cc.png', BUILD_DIR . '/images/cc.png');
+    copy(__DIR__ . '/templates/preamble.html', BUILD_DIR . '/pages/preamble.html');
+    copy(__DIR__ . '/templates/license.html', BUILD_DIR . '/pages/license.html');
 }
 
 function addOwnPages($pages) {

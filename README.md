@@ -1,6 +1,6 @@
 Learn You Some Erlang for Great Good! on Kindle
 ===============================================
-These are the sources that I used to generate [Fred Herbert's book][1] in the
+These are the sources that I used to generate [Fred Hebert's book][1] in the
 Kindle-supported .mobi format.
 
 If you only want the book, just download the mobi file from the Downloads section,

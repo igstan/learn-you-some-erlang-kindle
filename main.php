@@ -55,6 +55,15 @@ function centerImage($img) {
     $img->parentNode->replaceChild($div, $img);
     $div->setAttribute('class', 'image');
     $div->appendChild($clone);
+
+    $alt = $clone->getAttribute('alt');
+    if ($alt != '')
+    {
+        $div->appendChild(new DOMElement('br'));
+        $text = new DOMElement('i');
+        $text->nodeValue = $alt;
+        $div->appendChild($text);
+    }
 }
 
 function download($what, $where) {
@@ -72,12 +81,18 @@ function download($what, $where) {
     }
 }
 
+function appendSibling(DOMNode $newnode, DOMNode $ref)
+{
+    if ($ref->nextSibling) {
+        return $ref->parentNode->insertBefore($newnode, $ref->nextSibling);
+    } else {
+        return $ref->parentNode->appendChild($newnode);
+    }
+}
+
 function processImages($page) {
     foreach (nodes($page, 'img') as $img) {
-        if (! hasClass($img, 'explanation')) {
-            remove($img);
-            continue;
-        }
+        $parent = $img->parentNode;
 
         $imageSrc = $img->getAttribute('src');
         $imgName = pathinfo(parse_url($imageSrc, PHP_URL_PATH), PATHINFO_BASENAME);
@@ -87,17 +102,32 @@ function processImages($page) {
         $imageSrc = str_replace('http://learnyousomeerlang.com/static/img', '../images', $imageSrc);
         $img->setAttribute('src', $imageSrc);
 
+        if ($img->getAttribute('class') == '')
+            continue;
+
+        if (strtolower($parent->nodeName) == 'p')
+        {
+            $img = $parent->removeChild($img);
+            $img = appendSibling($img, $parent);
+        }
+        else if (strtolower($img->nextSibling->nodeName) == 'h3')
+        {
+            $h3 = $img->nextSibling;
+            $img = $parent->removeChild($img);
+            $img = appendSibling($img, $h3);
+        }
+
         centerImage($img);
     }
 }
 
 function removeHyperlink($link) {
-    $nodes = $link->childNodes;
-    $parent = $link->parentNode;
-    $parent->removeChild($link);
+    $clone = $link->cloneNode(true);
+    $span = new DOMElement('span');
+    $link->parentNode->replaceChild($span, $link);
 
-    foreach ($nodes as $node) {
-        $parent->appendChild($node);
+    foreach ($clone->childNodes as $node) {
+        $span->appendChild($node);
     }
 }
 

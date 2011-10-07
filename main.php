@@ -64,6 +64,15 @@ function centerImage($img) {
         $text->nodeValue = $alt;
         $div->appendChild($text);
     }
+
+    $alt = $clone->getAttribute('title');
+    if ($alt != '')
+    {
+        $div->appendChild(new DOMElement('br'));
+        $text = new DOMElement('i');
+        $text->nodeValue = $alt;
+        $div->appendChild($text);
+    }
 }
 
 function download($what, $where) {

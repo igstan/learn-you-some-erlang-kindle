@@ -1,4 +1,6 @@
 <?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 
 require_once __DIR__ . '/config.php';
 
@@ -56,22 +58,24 @@ function centerImage($img) {
     $div->setAttribute('class', 'image');
     $div->appendChild($clone);
 
-    $alt = $clone->getAttribute('alt');
-    if ($alt != '')
-    {
-        $div->appendChild(new DOMElement('br'));
-        $text = new DOMElement('i');
-        $text->nodeValue = $alt;
-        $div->appendChild($text);
+    if (contains(IMAGES, '-alt')) {
+        $alt = $clone->getAttribute('alt');
+        if ($alt) {
+            $div->appendChild(new DOMElement('br'));
+            $text = new DOMElement('i');
+            $text->nodeValue = $alt;
+            $div->appendChild($text);
+        }
     }
 
-    $alt = $clone->getAttribute('title');
-    if ($alt != '')
-    {
-        $div->appendChild(new DOMElement('br'));
-        $text = new DOMElement('i');
-        $text->nodeValue = $alt;
-        $div->appendChild($text);
+    if (contains(IMAGES, '-title')) {
+        $alt = $clone->getAttribute('title');
+        if ($alt) {
+            $div->appendChild(new DOMElement('br'));
+            $text = new DOMElement('i');
+            $text->nodeValue = $alt;
+            $div->appendChild($text);
+        }
     }
 }
 
@@ -101,7 +105,21 @@ function appendSibling(DOMNode $newnode, DOMNode $ref)
 
 function processImages($page) {
     foreach (nodes($page, 'img') as $img) {
-        $parent = $img->parentNode;
+        $show = false;
+
+        // $img->getAttribute('class') == '' is used for images inside text with formulas
+        if ($img->getAttribute('class') == '') {
+            $show = true;
+        } elseif (starts(IMAGES, 'explain') && !hasClass($img, 'explanation')) {
+            $show = false;
+        } elseif (starts(IMAGES, 'all')) {
+            $show = true;
+        }
+
+        if (!$show) {
+            remove($img);
+            continue;
+        }
 
         $imageSrc = $img->getAttribute('src');
         $imgName = pathinfo(parse_url($imageSrc, PHP_URL_PATH), PATHINFO_BASENAME);
@@ -114,13 +132,13 @@ function processImages($page) {
         if ($img->getAttribute('class') == '')
             continue;
 
-        if (strtolower($parent->nodeName) == 'p')
-        {
+        $parent = $img->parentNode;
+        
+        if (strtolower($parent->nodeName) == 'p') {
             $img = $parent->removeChild($img);
             $img = appendSibling($img, $parent);
-        }
-        else if (strtolower($img->nextSibling->nodeName) == 'h3')
-        {
+
+        } else if ($img->nextSibling && strtolower($img->nextSibling->nodeName) == 'h3') {
             $h3 = $img->nextSibling;
             $img = $parent->removeChild($img);
             $img = appendSibling($img, $h3);

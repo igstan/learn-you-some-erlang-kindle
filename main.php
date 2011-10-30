@@ -1,4 +1,6 @@
 <?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 
 require_once __DIR__ . '/config.php';
 
@@ -55,6 +57,26 @@ function centerImage($img) {
     $img->parentNode->replaceChild($div, $img);
     $div->setAttribute('class', 'image');
     $div->appendChild($clone);
+
+    if (contains(IMAGES, '-alt')) {
+        $alt = $clone->getAttribute('alt');
+        if ($alt) {
+            $div->appendChild(new DOMElement('br'));
+            $text = new DOMElement('i');
+            $text->nodeValue = $alt;
+            $div->appendChild($text);
+        }
+    }
+
+    if (contains(IMAGES, '-title')) {
+        $alt = $clone->getAttribute('title');
+        if ($alt) {
+            $div->appendChild(new DOMElement('br'));
+            $text = new DOMElement('i');
+            $text->nodeValue = $alt;
+            $div->appendChild($text);
+        }
+    }
 }
 
 function download($what, $where) {
@@ -72,9 +94,29 @@ function download($what, $where) {
     }
 }
 
+function appendSibling(DOMNode $newnode, DOMNode $ref)
+{
+    if ($ref->nextSibling) {
+        return $ref->parentNode->insertBefore($newnode, $ref->nextSibling);
+    } else {
+        return $ref->parentNode->appendChild($newnode);
+    }
+}
+
 function processImages($page) {
     foreach (nodes($page, 'img') as $img) {
-        if (! hasClass($img, 'explanation')) {
+        $show = false;
+
+        // $img->getAttribute('class') == '' is used for images inside text with formulas
+        if ($img->getAttribute('class') == '') {
+            $show = true;
+        } elseif (starts(IMAGES, 'explain') && !hasClass($img, 'explanation')) {
+            $show = false;
+        } elseif (starts(IMAGES, 'all')) {
+            $show = true;
+        }
+
+        if (!$show) {
             remove($img);
             continue;
         }
@@ -87,17 +129,32 @@ function processImages($page) {
         $imageSrc = str_replace('http://learnyousomeerlang.com/static/img', '../images', $imageSrc);
         $img->setAttribute('src', $imageSrc);
 
+        if ($img->getAttribute('class') == '')
+            continue;
+
+        $parent = $img->parentNode;
+        
+        if (strtolower($parent->nodeName) == 'p') {
+            $img = $parent->removeChild($img);
+            $img = appendSibling($img, $parent);
+
+        } else if ($img->nextSibling && strtolower($img->nextSibling->nodeName) == 'h3') {
+            $h3 = $img->nextSibling;
+            $img = $parent->removeChild($img);
+            $img = appendSibling($img, $h3);
+        }
+
         centerImage($img);
     }
 }
 
 function removeHyperlink($link) {
-    $nodes = $link->childNodes;
-    $parent = $link->parentNode;
-    $parent->removeChild($link);
+    $clone = $link->cloneNode(true);
+    $span = new DOMElement('span');
+    $link->parentNode->replaceChild($span, $link);
 
-    foreach ($nodes as $node) {
-        $parent->appendChild($node);
+    foreach ($clone->childNodes as $node) {
+        $span->appendChild($node);
     }
 }
 

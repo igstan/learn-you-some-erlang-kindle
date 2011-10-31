@@ -133,7 +133,7 @@ function processImages($page) {
             continue;
 
         $parent = $img->parentNode;
-        
+
         if (strtolower($parent->nodeName) == 'p') {
             $img = $parent->removeChild($img);
             $img = appendSibling($img, $parent);

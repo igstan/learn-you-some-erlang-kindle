@@ -94,8 +94,7 @@ function download($what, $where) {
     }
 }
 
-function appendSibling(DOMNode $newnode, DOMNode $ref)
-{
+function appendSibling(DOMNode $newnode, DOMNode $ref) {
     if ($ref->nextSibling) {
         return $ref->parentNode->insertBefore($newnode, $ref->nextSibling);
     } else {
@@ -133,7 +132,7 @@ function processImages($page) {
             continue;
 
         $parent = $img->parentNode;
-        
+
         if (strtolower($parent->nodeName) == 'p') {
             $img = $parent->removeChild($img);
             $img = appendSibling($img, $parent);

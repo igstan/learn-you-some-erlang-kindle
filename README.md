@@ -3,8 +3,9 @@ Learn You Some Erlang for Great Good! on Kindle
 These are the sources that I used to generate [Fred Hebert's book][1] in the
 Kindle-supported .mobi format.
 
-If you only want the book, just download the mobi file from the Downloads section,
-then load it on your device.
+If you only want the book, just download the [mobi file][3] from my web site.
+Please note that I'm not updating this file periodically, at which point you
+will want to generate the book by yourself.
 
 
 How to Generate the Book
@@ -25,3 +26,4 @@ Screenshots
 
 [1]: http://learnyousomeerlang.com/
 [2]: http://www.amazon.com/gp/feature.html?ie=UTF8&docId=1000234621
+[3]: http://static.igstan.ro/learn-you-some-erlang.mobi

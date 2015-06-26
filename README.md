@@ -6,10 +6,10 @@ Kindle-supported .mobi format.
 Download
 --------
 
-These files were generated on May 10th, 2014.
+These files were generated on June 26th, 2015.
 
- - [mobi file containing all images](http://static.igstan.ro/learn-you-some-erlang-10-may-2015-all-images.mobi)
- - [mobi file containing just images needed for explanation](http://static.igstan.ro/learn-you-some-erlang-10-may-2014.mobi)
+ - [mobi file containing all images](http://static.igstan.ro/learn-you-some-erlang-26-june-2015-all-images.mobi)
+ - [mobi file containing just images needed for explanation](http://static.igstan.ro/learn-you-some-erlang-26-june-2015.mobi)
 
 
 How to Generate the Book

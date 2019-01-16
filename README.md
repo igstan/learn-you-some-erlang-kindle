@@ -29,5 +29,5 @@ Screenshots
 ![Sample image](https://github.com/igstan/learn-you-some-erlang-kindle/raw/master/screenshot-03.gif)
 
 [1]: http://learnyousomeerlang.com/
-[2]: http://www.amazon.com/gp/feature.html?ie=UTF8&docId=1000234621
+[2]: https://www.amazon.com/gp/feature.html?tag=mr060-20&docId=1000765211
 [3]: http://static.igstan.ro/learn-you-some-erlang-10-april-2014.mobi
